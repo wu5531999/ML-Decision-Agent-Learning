@@ -16,7 +16,7 @@ jobs:
 
       # 导出第一个收藏夹到临时文件
       - name: 导出收藏夹1
-        uses: kv9898/zotero-bibtex-export-action@v1
+        uses:  kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
@@ -25,7 +25,7 @@ jobs:
 
       # 导出第二个收藏夹到临时文件
       - name: 导出收藏夹2
-        uses: kv9898/zotero-bibtex-export-action@v1
+        uses:  kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
@@ -34,7 +34,7 @@ jobs:
 
       # 导出第三个收藏夹到临时文件
       - name: 导出收藏夹3
-        uses: kv9898/zotero-bibtex-export-action@v1
+        uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
