@@ -1,0 +1,27 @@
+name: 同步Zotero参考文献
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC时间0点自动运行
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 从Zotero导出BibTeX
+        uses: kv9898/zotero-bibtex-export-action@v1
+        with:
+          api-key: ${{ secrets.ZOTERO_API_KEY }}
+          library-id: ${{ secrets.ZOTERO_USER_ID }}
+          coll-key: "你的收藏夹密钥"  # 见下方说明
+          out-bib-path: "references.bib"
+      
+      - name: 提交并推送更改
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add references.bib
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自动同步Zotero参考文献" && git push)
