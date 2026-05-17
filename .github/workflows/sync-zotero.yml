@@ -1,27 +1,58 @@
-name: 同步Zotero参考文献
-
+name: 自动同步Zotero参考文献（合并3个收藏夹）
 on:
+  push:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC时间0点自动运行
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 0 * * *'  # 每天北京时间8点自动同步
+
+permissions:
+  contents: write
 
 jobs:
-  sync:
+  export-bibtex:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: 从Zotero导出BibTeX
+
+      # 导出第一个收藏夹到临时文件
+      - name: 导出收藏夹1
         uses: kv9898/zotero-bibtex-export-action@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
-          coll-key: "你的收藏夹密钥"  # 见下方说明
-          out-bib-path: "references.bib"
-      
+          coll-key: "AS87DAFL"  # 替换成你的第一个密钥
+          out-bib-path: "temp1.bib"
+
+      # 导出第二个收藏夹到临时文件
+      - name: 导出收藏夹2
+        uses: kv9898/zotero-bibtex-export-action@v1
+        with:
+          api-key: ${{ secrets.ZOTERO_API_KEY }}
+          library-id: ${{ secrets.ZOTERO_USER_ID }}
+          coll-key: "AQPYWKXL"  # 替换成你的第二个密钥
+          out-bib-path: "temp2.bib"
+
+      # 导出第三个收藏夹到临时文件
+      - name: 导出收藏夹3
+        uses: kv9898/zotero-bibtex-export-action@v1
+        with:
+          api-key: ${{ secrets.ZOTERO_API_KEY }}
+          library-id: ${{ secrets.ZOTERO_USER_ID }}
+          coll-key: "AG9APBQB"  # 替换成你的第三个密钥
+          out-bib-path: "temp3.bib"
+
+      # 合并所有临时文件到最终的references.bib
+      - name: 合并所有参考文献
+        run: |
+          # 合并三个临时文件
+          cat temp1.bib temp2.bib temp3.bib > references.bib
+          # 删除临时文件，保持仓库整洁
+          rm temp1.bib temp2.bib temp3.bib
+
+      # 提交并推送最终的合并文件
       - name: 提交并推送更改
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add references.bib
-          git diff --quiet && git diff --staged --quiet || (git commit -m "自动同步Zotero参考文献" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自动合并并同步3个Zotero收藏夹" && git push origin main)
