@@ -19,14 +19,17 @@ jobs:
 
       # 导出第一个收藏夹到临时文件
       - name: 导出收藏夹1
+        continue-on-error: true  # 即使这个步骤失败，也继续运行后面的步骤
         uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
           coll-key: "AS87DAFL"  # 替换成你的第一个收藏夹ID
+          out-bib-path: "temp1.bib"
 
       # 导出第二个收藏夹到临时文件
       - name: 导出收藏夹2
+        continue-on-error: true
         uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
@@ -36,6 +39,7 @@ jobs:
 
       # 导出第三个收藏夹到临时文件
       - name: 导出收藏夹3
+        continue-on-error: true
         uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
@@ -46,10 +50,36 @@ jobs:
       # 合并所有临时文件到最终的references.bib
       - name: 合并所有参考文献
         run: |
-          # 合并三个临时文件
-          cat temp1.bib temp2.bib temp3.bib > references.bib
-          # 删除临时文件，保持仓库整洁
-          rm temp1.bib temp2.bib temp3.bib
+          # 先创建一个空的最终文件
+          > references.bib
+          
+          # 逐个检查并合并存在的临时文件
+          if [ -f temp1.bib ]; then
+            echo "✅ 合并收藏夹1"
+            cat temp1.bib >> references.bib
+          else
+            echo "⚠️  收藏夹1导出失败，跳过"
+          fi
+          
+          if [ -f temp2.bib ]; then
+            echo "✅ 合并收藏夹2"
+            cat temp2.bib >> references.bib
+          else
+            echo "⚠️  收藏夹2导出失败，跳过"
+          fi
+          
+          if [ -f temp3.bib ]; then
+            echo "✅ 合并收藏夹3"
+            cat temp3.bib >> references.bib
+          else
+            echo "⚠️  收藏夹3导出失败，跳过"
+          fi
+          
+          # 删除所有临时文件
+          rm -f temp1.bib temp2.bib temp3.bib
+          
+          # 打印最终结果
+          echo "✅ 合并完成，references.bib共包含 $(wc -l < references.bib) 行"
 
       # 提交并推送最终的合并文件
       - name: 提交并推送更改
@@ -57,4 +87,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add references.bib
-          git diff --quiet && git diff --staged --quiet || (git commit -m "自动合并并同步3个Zotero收藏夹" && git push origin main)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自动合并并同步Zotero收藏夹" && git push origin main)
