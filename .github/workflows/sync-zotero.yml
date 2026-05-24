@@ -1,29 +1,15 @@
-name: Sync Zotero
-on:
-  workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Export Zotero BibTeX
-        uses: kv9898/actions-zotero-bibtex@v1
-        with:
-          api-key: ${{ secrets.ZOTERO_API_KEY }}
-          # 其他参数保持不变
 name: 自动同步Zotero参考文献（合并3个收藏夹）
+
 on:
-  push:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # 每天北京时间8点自动同步
+    - cron: '0 0 * * *'  # 每天UTC时间0点（北京时间8点）自动同步
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # 解决Node.js 20弃用警告
 
 permissions:
-  contents: write
+  contents: write  # 给工作流写入仓库的权限
 
 jobs:
   export-bibtex:
@@ -33,20 +19,19 @@ jobs:
 
       # 导出第一个收藏夹到临时文件
       - name: 导出收藏夹1
-        uses:  kv9898/actions-zotero-bibtex@v1
+        uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
-          coll-key: "AS87DAFL"  # 替换成你的第一个密钥
-          out-bib-path: "temp1.bib"
+          coll-key: "AS87DAFL"  # 替换成你的第一个收藏夹ID
 
       # 导出第二个收藏夹到临时文件
       - name: 导出收藏夹2
-        uses:  kv9898/actions-zotero-bibtex@v1
+        uses: kv9898/actions-zotero-bibtex@v1
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
-          coll-key: "AQPYWKXL"  # 替换成你的第二个密钥
+          coll-key: "AQPYWKXL"  # 替换成你的第二个收藏夹ID
           out-bib-path: "temp2.bib"
 
       # 导出第三个收藏夹到临时文件
@@ -55,7 +40,7 @@ jobs:
         with:
           api-key: ${{ secrets.ZOTERO_API_KEY }}
           library-id: ${{ secrets.ZOTERO_USER_ID }}
-          coll-key: "AG9APBQB"  # 替换成你的第三个密钥
+          coll-key: "AG9APBQB"  # 替换成你的第三个收藏夹ID
           out-bib-path: "temp3.bib"
 
       # 合并所有临时文件到最终的references.bib
