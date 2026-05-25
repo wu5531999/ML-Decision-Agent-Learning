@@ -26,36 +26,7 @@
 - 完整的实验复现指南，确保100%可复现
 ---
 ## 📁 项目目录结构
-ML-Decision-Agent-Learning/
-├── ⚙️ 00_环境配置 / # 环境配置文档与依赖清单
-│ └── requirements.txt
-├── 📚 01_机器学习基础 / # 机器学习核心算法实现
-│ ├── 监督学习 /
-│ │ ├── linear_regression.py # 线性回归
-│ │ ├── logistic_regression.py # 逻辑回归
-│ │ └── decision_tree.py # 决策树分类
-│ ├── 无监督学习 /
-│ │ ├── kmeans.py # K-Means 聚类
-│ │ └── pca.py # PCA 降维
-│ └── 深度学习基础 /
-│ └── simple_nn.py # 简单神经网络
-├── 🎯 02_决策模型 / # 决策理论与序列决策模型
-│ ├── bayesian_decision.py # 贝叶斯分类器
-│ └── mdp_basic.py # 马尔可夫决策过程基础
-├── 🤖 03_智能体案例 / # 智能体实践案例
-│ ├── rule_agent_tictactoe.py # 井字棋规则智能体
-│ ├── qlearning_gridworld.py # Q-learning 网格世界导航
-│ └── dqn_cartpole.py # DQN CartPole 平衡
-├── 📊 实验结果与复现说明 / # 所有实验的运行结果与截图
-├── 📄 docs/ # 项目文档
-│ ├── 技术综述报告.md
-│ ├── 学习指南.md
-│ └── 实验复现指南.md
-├── 💾 data/MNIST/raw/ # MNIST 手写数字数据集
-├── 🔧 .github/workflows/ # GitHub Actions Zotero 自动同步配置
-├── 📑 references.bib # BibTeX 参考文献库
-├── 🧠 best_model.pth # 训练好的最佳模型权重
-└── 📖 README.md # 项目说明文档
+ML-Decision-Agent-Learning/├── ⚙️ 00_环境配置 / # 环境配置文档与依赖清单│ └── requirements.txt├── 📚 01_机器学习基础 / # 机器学习核心算法实现│ ├── 监督学习 /│ │ ├── linear_regression.py # 线性回归│ │ ├── logistic_regression.py # 逻辑回归│ │ └── decision_tree.py # 决策树分类│ ├── 无监督学习 /│ │ ├── kmeans.py # K-Means 聚类│ │ └── pca.py # PCA 降维│ └── 深度学习基础 /│ └── simple_nn.py # 简单神经网络├── 🎯 02_决策模型 / # 决策理论与序列决策模型│ ├── bayesian_decision.py # 贝叶斯分类器│ └── mdp_basic.py # 马尔可夫决策过程基础├── 🤖 03_智能体案例 / # 智能体实践案例│ ├── rule_agent_tictactoe.py # 井字棋规则智能体│ ├── qlearning_gridworld.py # Q-learning 网格世界导航│ └── dqn_cartpole.py # DQN CartPole 平衡├── 📊 实验结果与复现说明 / # 所有实验的运行结果与截图├── 📄 docs/ # 项目文档│ ├── 技术综述报告.md│ ├── 学习指南.md│ └── 实验复现指南.md├── 💾 data/MNIST/raw/ # MNIST 手写数字数据集├── 🔧 .github/workflows/ # GitHub Actions Zotero 自动同步配置├── 📑 references.bib # BibTeX 参考文献库├── 🧠 best_model.pth # 训练好的最佳模型权重└── 📖 README.md # 项目说明文档
 
 📄 项目信息
 •项目名称：机器学习、决策模型与智能体知识体系构建
