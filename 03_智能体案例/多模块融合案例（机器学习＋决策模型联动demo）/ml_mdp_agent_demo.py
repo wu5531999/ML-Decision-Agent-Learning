@@ -103,7 +103,7 @@ for e in range(TEST_EPISODES):
 # 输出测试结果
 avg_score = np.mean(total_scores)
 print(f"\n📈 联动系统测试完成！")
-print(f"平均得分: {avg_score:.2f}（满分200）")
+print(f"平均得分: {avg_score:.2f}（满分20.0）")
 print("说明：得分越高，联动系统效果越好！")
 
 env.close()
